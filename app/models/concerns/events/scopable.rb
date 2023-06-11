@@ -4,7 +4,7 @@ module Events
 
     included do
       scope :openings, -> { where(kind: 'opening') }
-      scope :appointmentw, -> { where(kind: 'appointment')}
+      scope :appointments, -> { where(kind: 'appointment') }
     end
   end
 end
