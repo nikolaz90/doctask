@@ -4,7 +4,9 @@ module Events
 
     included do
       scope :openings, -> { where(kind: 'opening') }
-      scope :appointments, -> { where(kind: 'appointment') }
+      scope :appointments_today, ->(start_time) {
+        where(kind: 'appointment').and(where('starts_at BETWEEN ? AND ?', start_time, start_time.end_of_day))
+      }
     end
   end
 end
