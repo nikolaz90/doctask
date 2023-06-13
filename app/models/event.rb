@@ -32,6 +32,10 @@ class Event < ApplicationRecord
     { date: starts_at.to_date, slots: open_slots }
   end
 
+  def self.round_down(starts_at)
+    Time.at((starts_at.to_f / 30.minutes).round * 30.minutes)
+  end
+
   private
 
   def slots_show_time
