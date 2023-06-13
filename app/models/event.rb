@@ -2,6 +2,7 @@ class Event < ApplicationRecord
   include Events::Scopable
 
   def self.availabilities(date_time)
+    day = date_time.wday
     p openings.map(&:availability)
   end
 
