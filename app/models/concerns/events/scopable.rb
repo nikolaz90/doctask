@@ -13,7 +13,8 @@ module Events
           weekly_recurring: true
         ).or(
           where(
-            kind: 'opening'
+            kind: 'opening',
+            weekly_recurring: false
           ).and(
             where(
               'starts_at BETWEEN ? AND ?', date_time, date_time + 7.days

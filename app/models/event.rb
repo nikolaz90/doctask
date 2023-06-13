@@ -2,8 +2,10 @@ class Event < ApplicationRecord
   include Events::Scopable
 
   def self.availabilities(date_time)
-    day = date_time.wday
-    p upcoming(date_time).map(&:availability)
+    # p upcoming(date_time).map do |event|
+    #   event.availability(date_time)
+    # end
+    upcoming(date_time).map { |i| i.availability(date_time) }
   end
 
   def self.slots(starts_at, ends_at)
@@ -27,10 +29,14 @@ class Event < ApplicationRecord
     slots.map { |date_time| date_time.strftime('%H:%M') }
   end
 
-  def availability
+  def availability(date_time)
     return 'this is an appointment' if kind == 'appointment'
 
-    { date: starts_at.to_date, slots: open_slots }
+    return { date: starts_at.to_date, slots: open_slots } if weekly_recurring == false
+
+    weekly_difference = date_time.cweek - starts_at.to_date.cweek
+    date = (starts_at + weekly_difference.weeks).to_date
+    { date:, slots: open_slots }
   end
 
   def self.round_down(starts_at)
