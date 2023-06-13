@@ -3,7 +3,7 @@ class Event < ApplicationRecord
 
   def self.availabilities(date_time)
     day = date_time.wday
-    p openings.map(&:availability)
+    p upcoming(date_time).map(&:availability)
   end
 
   def self.slots(starts_at, ends_at)
