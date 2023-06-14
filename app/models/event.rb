@@ -12,13 +12,13 @@ class Event < ApplicationRecord
     end
   end
 
-  # def open_slots(availability_date)
-  #   return 'this is an appointment' if kind == 'appointment'
+  def open_slots(availability_date)
+    return 'this is an appointment' if kind == 'appointment'
 
-  #   bookings = Event.appointments_today(availability_date).map(&:slots_show_time).flatten
-  #   filtered_slots = slots.reject! { |date_time| bookings.include?(date_time.strftime('%H:%M')) }
-  #   filtered_slots.map { |date_time| date_time.strftime('%H:%M') }
-  # end
+    bookings = Event.appointments_today(availability_date).map(&:slots_show_time).flatten
+    filtered_slots = slots.reject! { |date_time| bookings.include?(date_time.strftime('%H:%M')) }
+    filtered_slots.map { |date_time| date_time.strftime('%H:%M') }
+  end
 
   def availability(date_time)
     return 'this is an appointment' if kind == 'appointment'
@@ -41,15 +41,6 @@ class Event < ApplicationRecord
   end
 
   private
-
-  def open_slots(availability_date)
-    return 'this is an appointment' if kind == 'appointment'
-
-    bookings = Event.appointments_today(availability_date).map(&:slots_show_time).flatten
-    filtered_slots = slots.reject! { |date_time| bookings.include?(date_time.strftime('%H:%M')) }
-    filtered_slots.map { |date_time| date_time.strftime('%H:%M') }
-  end
-
 
   def slots
     number_of_half_hours = ((ends_at - starts_at) / 1.hour).floor * 2
