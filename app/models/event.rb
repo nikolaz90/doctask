@@ -2,9 +2,15 @@ class Event < ApplicationRecord
   include Events::Scopable
 
   def self.availabilities(date_time)
-    p template_array = 7.times.map { |i| {date: date_time.to_date + i.days, slots: [] } }
-    p data_array = upcoming(date_time).map { |i| i.availability(date_time) }
-    # work on arrays to get the same dates above arrays
+    upcoming = upcoming(date_time)
+
+    availability_hashes = 7.times.map { |i| { date: date_time.to_date + i.days, slots: [] } }
+    availability_hashes.each do |availability|
+      upcoming.each do |event|
+        availability[:slots] = event.open_slots if event.availability?(availability[:date])
+      end
+    end
+    p availability_hashes
   end
 
   def self.slots(starts_at, ends_at)
@@ -23,6 +29,7 @@ class Event < ApplicationRecord
 
     slots = Event.slots(starts_at, ends_at)
     bookings = Event.appointments_today(starts_at).map(&:booked_slots).flatten
+    debugger
     slots.reject! { |date_time| bookings.include?(date_time.strftime('%H:%M')) }
 
     slots.map { |date_time| date_time.strftime('%H:%M') }
@@ -36,6 +43,12 @@ class Event < ApplicationRecord
     weekly_difference = date_time.cweek - starts_at.to_date.cweek
     date = (starts_at + weekly_difference.weeks).to_date
     { date:, slots: open_slots }
+  end
+
+  def availability?(date)
+    return 'this is an appointment' if kind == 'appointment'
+
+    starts_at.wday == date.wday && open_slots.any?
   end
 
   # def self.round_down(starts_at)
