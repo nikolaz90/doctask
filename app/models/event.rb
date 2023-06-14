@@ -20,16 +20,6 @@ class Event < ApplicationRecord
     filtered_slots.map { |date_time| date_time.strftime('%H:%M') }
   end
 
-  def availability(date_time)
-    return 'this is an appointment' if kind == 'appointment'
-
-    return { date: starts_at.to_date, slots: open_slots(starts_at) } if weekly_recurring == false
-
-    weekly_difference = date_time.cweek - starts_at.to_date.cweek
-    date = (starts_at + weekly_difference.weeks).to_date
-    { date:, slots: open_slots(date) }
-  end
-
   def availability?(date)
     return 'this is an appointment' if kind == 'appointment'
 
@@ -46,6 +36,17 @@ class Event < ApplicationRecord
     number_of_half_hours = ((ends_at - starts_at) / 1.hour).floor * 2
     number_of_half_hours.times.map { |i| starts_at + i * 30.minutes }
   end
+
+  def availability(date_time)
+    return 'this is an appointment' if kind == 'appointment'
+
+    return { date: starts_at.to_date, slots: open_slots(starts_at) } if weekly_recurring == false
+
+    weekly_difference = date_time.cweek - starts_at.to_date.cweek
+    date = (starts_at + weekly_difference.weeks).to_date
+    { date:, slots: open_slots(date) }
+  end
+
   # def self.round_down(starts_at)
   #   Time.at((starts_at.to_f / 30.minutes).round * 30.minutes)
   # end
