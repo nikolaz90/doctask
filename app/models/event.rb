@@ -42,7 +42,6 @@ class Event < ApplicationRecord
     starts_at.wday == date.wday && open_slots(date).any?
   end
 
-
   private
 
   def slots
