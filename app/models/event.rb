@@ -2,15 +2,15 @@ class Event < ApplicationRecord
   include Events::Scopable
 
   def self.availabilities(date_time)
-    upcoming = upcoming(date_time)
+    upcoming_events = upcoming(date_time)
 
     availability_hashes = 7.times.map { |i| { date: date_time.to_date + i.days, slots: [] } }
     availability_hashes.each do |availability|
-      upcoming.each do |event|
+      upcoming_events.each do |event|
         availability[:slots] = event.open_slots(availability[:date]) if event.availability?(availability[:date])
       end
     end
-    p availability_hashes
+    availability_hashes
   end
 
   def self.slots(starts_at, ends_at)
