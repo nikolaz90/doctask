@@ -2,9 +2,6 @@ class Event < ApplicationRecord
   include Events::Scopable
 
   def self.availabilities(date_time)
-    # p upcoming(date_time).map do |event|
-    #   event.availability(date_time)
-    # end
     upcoming(date_time).map { |i| i.availability(date_time) }
   end
 
