@@ -2,7 +2,9 @@ class Event < ApplicationRecord
   include Events::Scopable
 
   def self.availabilities(date_time)
-    upcoming(date_time).map { |i| i.availability(date_time) }
+    p template_array = 7.times.map { |i| {date: date_time.to_date + i.days, slots: [] } }
+    p data_array = upcoming(date_time).map { |i| i.availability(date_time) }
+    # work on arrays to get the same dates above arrays
   end
 
   def self.slots(starts_at, ends_at)
@@ -36,9 +38,9 @@ class Event < ApplicationRecord
     { date:, slots: open_slots }
   end
 
-  def self.round_down(starts_at)
-    Time.at((starts_at.to_f / 30.minutes).round * 30.minutes)
-  end
+  # def self.round_down(starts_at)
+  #   Time.at((starts_at.to_f / 30.minutes).round * 30.minutes)
+  # end
 
   private
 
