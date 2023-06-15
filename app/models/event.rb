@@ -13,7 +13,7 @@ class Event < ApplicationRecord
   end
 
   def open_slots(availability_date)
-    return 'this is an appointment' if kind == 'appointment'
+    return 'Error: this is an appointment' if kind == 'appointment'
 
     bookings = Event.appointments_today(availability_date).map(&:slots_show_time).flatten
     filtered_slots = slots.reject! { |date_time| bookings.include?(date_time.strftime('%-l:%M')) }
@@ -21,7 +21,7 @@ class Event < ApplicationRecord
   end
 
   def availability?(date)
-    return 'this is an appointment' if kind == 'appointment'
+    return 'Error: this is an appointment' if kind == 'appointment'
 
     starts_at.wday == date.wday && open_slots(date).any?
   end
@@ -38,7 +38,7 @@ class Event < ApplicationRecord
   end
 
   def availability(date_time)
-    return 'this is an appointment' if kind == 'appointment'
+    return 'Error: this is an appointment' if kind == 'appointment'
 
     return { date: starts_at.to_date, slots: open_slots(starts_at) } if weekly_recurring == false
 
