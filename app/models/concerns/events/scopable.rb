@@ -25,8 +25,8 @@ module Events
         ).and(
           where(
             'starts_at BETWEEN ? AND ?', start_time, start_time.end_of_day
-            )
           )
+        )
       }
     end
   end

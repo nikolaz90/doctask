@@ -33,7 +33,7 @@ class Event < ApplicationRecord
   private
 
   def slots
-    number_of_half_hours = ((ends_at - starts_at) / 1.hour).floor * 2
+    number_of_half_hours = ((ends_at - starts_at) / 30.minutes).floor
     number_of_half_hours.times.map { |i| starts_at + i * 30.minutes }
   end
 
