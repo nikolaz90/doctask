@@ -16,8 +16,8 @@ class Event < ApplicationRecord
     return 'this is an appointment' if kind == 'appointment'
 
     bookings = Event.appointments_today(availability_date).map(&:slots_show_time).flatten
-    filtered_slots = slots.reject! { |date_time| bookings.include?(date_time.strftime('%H:%M')) }
-    filtered_slots.map { |date_time| date_time.strftime('%H:%M') }
+    filtered_slots = slots.reject! { |date_time| bookings.include?(date_time.strftime('%-l:%M')) }
+    filtered_slots.map { |date_time| date_time.strftime('%-l:%M') }
   end
 
   def availability?(date)
@@ -27,7 +27,7 @@ class Event < ApplicationRecord
   end
 
   def slots_show_time
-    slots.map { |date_time| date_time.strftime('%H:%M') }
+    slots.map { |date_time| date_time.strftime('%-l:%M') }
   end
 
   private
