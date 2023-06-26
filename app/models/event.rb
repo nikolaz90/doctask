@@ -7,7 +7,7 @@ class Event < ApplicationRecord
 
     availability_hashes.each do |availability|
       upcoming_events.each do |event|
-        availability[:slots] = event.open_slots(availability[:date]) if event.availability?(availability[:date])
+        availability[:slots] = event.open_slots(availability[:date]) if event.available?(availability[:date])
       end
     end
   end
@@ -20,7 +20,7 @@ class Event < ApplicationRecord
     filtered_slots.map { |date_time| date_time.strftime('%-l:%M') }
   end
 
-  def availability?(date)
+  def available?(date)
     return 'Error: this is an appointment' if kind == 'appointment'
 
     starts_at.wday == date.wday && open_slots(date).any?
@@ -34,7 +34,7 @@ class Event < ApplicationRecord
 
   def slots
     number_of_half_hours = ((ends_at - starts_at) / 30.minutes).floor
-    number_of_half_hours.times.map { |i| starts_at + i * 30.minutes }
+    number_of_half_hours.times.map { |i| starts_at + (i * 30.minutes) }
   end
 
   def availability(date_time)
