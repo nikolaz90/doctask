@@ -3,9 +3,9 @@ class Event < ApplicationRecord
 
   def self.availabilities(date_time)
     upcoming_events = upcoming_openings(date_time)
-    availability_hashes = 7.times.map { |i| { date: date_time.to_date + i.days, slots: [] } }
+    availabilities = 7.times.map { |i| { date: date_time.to_date + i.days, slots: [] } }
 
-    availability_hashes.each do |availability|
+    availabilities.each do |availability|
       upcoming_events.each do |event|
         availability[:slots] = event.open_slots(availability[:date]) if event.available?(availability[:date])
       end
