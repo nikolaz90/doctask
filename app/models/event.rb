@@ -13,15 +13,15 @@ class Event < ApplicationRecord
   end
 
   def open_slots(availability_date)
-    return 'Error: this is an appointment' if kind == 'appointment'
+    raise NoMethodError, 'Error: this is an appointment and does not have an open slots method' if kind == 'appointment'
 
-    bookings = Event.appointments_today(availability_date).map(&:slots_show_time).flatten
+    bookings = self.class.appointments_today(availability_date).map(&:slots_show_time).flatten
     filtered_slots = slots.reject! { |date_time| bookings.include?(date_time.strftime('%-l:%M')) }
     filtered_slots.map { |date_time| date_time.strftime('%-l:%M') }
   end
 
   def available?(date)
-    return 'Error: this is an appointment' if kind == 'appointment'
+    raise NoMethodError, 'Error: this is an appointment and does not have an available? method' if kind == 'appointment'
 
     starts_at.wday == date.wday && open_slots(date).any?
   end
@@ -38,7 +38,7 @@ class Event < ApplicationRecord
   end
 
   def availability(date_time)
-    return 'Error: this is an appointment' if kind == 'appointment'
+    raise NoMethodError, 'Error: this is an appointment and does not have an availability method' if kind == 'appointment'
 
     return { date: starts_at.to_date, slots: open_slots(starts_at) } if weekly_recurring == false
 
