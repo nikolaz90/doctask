@@ -15,6 +15,10 @@ module Events
             where(
               'starts_at BETWEEN ? AND ?', date_time, date_time + 7.days
             )
+          ).and(
+            where(
+              'starts_at > ?', DateTime.now
+            )
           )
         )
       }
