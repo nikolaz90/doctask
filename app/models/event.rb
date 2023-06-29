@@ -42,8 +42,8 @@ class Event < ApplicationRecord
 
     return { date: starts_at.to_date, slots: open_slots(starts_at) } if weekly_recurring == false
 
-    weekly_difference = date_time.cweek - starts_at.to_date.cweek
-    date = (starts_at + weekly_difference.weeks).to_date
+    difference_in_weeks = date_time.cweek - starts_at.to_date.cweek
+    date = (starts_at + difference_in_weeks.weeks).to_date
     { date:, slots: open_slots(date) }
   end
 
